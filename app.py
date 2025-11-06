@@ -56,6 +56,20 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html', form=form)
 
+@app.route('/home')
+def home():
+    if 'logged_in' in session:
+        return render_template('home.html')
+    else:
+        flash('Please log in to access this page.', 'warning')
+        return redirect(url_for('login'))
+    
+@app.route('/logout')
+def logout():
+    session.clear()
+    flash('You have been logged out.', 'info')
+    return redirect(url_for('login'))
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
