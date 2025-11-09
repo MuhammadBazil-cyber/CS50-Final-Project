@@ -1,0 +1,45 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial App</title>
+</head>
+<body>
+    <h1>Welcome to the Home Page</h1>
+    <p>You are successfully logged in!</p>
+    <form action="/add_income" method="post">
+        <ul>
+            <li> <input type="text" name="income_source" placeholder="Income source" /> <br>
+            <input type="number" name="amount" placeholder="Amount in USD $" /></li>
+            <li> 
+                <button type="button" class="ADD">Add another source</button> 
+                <button type="submit" class="ADD_INCOME">Add Income</button>
+            </li>
+            <li>
+                <p>Your current total income is: ${{ finalamount }}</p>
+            </li>
+        </ul>
+    </form>
+    <a href="/logout">Logout</a>
+
+</body>
+<script>
+document.querySelector('.ADD').onclick = function() {
+    // this is for first adding income list, being a parent element of button and li into a variable
+    const incomelist = document.querySelector('ul');
+    // creating an li tag for new income entry
+    const newIncome = document.createElement('li');
+    // inserting the input fields into the new li tag
+    newIncome.innerHTML = '<input type="text" placeholder="Income source" /> <br> <input type="number" placeholder="Amount" />';
+    const addButton = document.querySelector('.ADD');
+    // inserting the new income entry before the add button's parent element (li)
+    // .parentElement. means the li tag that holds the add button
+    incomelist.insertBefore(newIncome, addButton.parentElement);
+};
+
+
+    
+    // Add your JavaScript code here for handling income addition
+</script>
+</html>

@@ -56,6 +56,42 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html', form=form)
 
+@app.route('/add_income', methods=['POST'])
+def add_income():
+    if 'logged_in' in session:
+        amount = request.form.get('amount')
+
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('UPDATE cs50 SET amount = amount + %s WHERE id = %s',
+                       (amount, session['user_id']))
+        mysql.connection.commit()
+        cursor.close()
+        flash('Income added successfully!', 'success')
+        return redirect(url_for('home'))
+    else:
+        flash('Please log in to access this page.', 'warning')
+        return redirect(url_for('login'))
+
+@app.route('/home')
+def home():
+    if 'logged_in' in session:
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT amount FROM cs50 WHERE id = %s',
+                       (session['user_id'],))
+        income = cursor.fetchone()
+        finalamount = income['amount']
+        cursor.close()
+        return render_template('home.html', finalamount=finalamount)
+    else:
+        flash('Please log in to access this page.', 'warning')
+        return redirect(url_for('login'))
+    
+@app.route('/logout')
+def logout():
+    session.clear()
+    flash('You have been logged out.', 'info')
+    return redirect(url_for('login'))
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
