@@ -60,9 +60,16 @@ def register():
 def add_income():
     if 'logged_in' in session:
         amount = request.form.get('amount')
-
+        s_amount = request.form.get('income_source')
+        # for individual values and sources to be portrayed on the home page, this is the first storing of data step
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('UPDATE cs50 SET amount = amount + %s WHERE id = %s',
+        cursor.execute('INSERT INTO storage (source, s_amount, user_id) VALUES (%s, %s, %s)',
+                       (s_amount, amount, session['user_id']))
+        mysql.connection.commit()
+        cursor.close()  
+        # updating the total amount in the main amount column
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('UPDATE storage SET amount = amount + %s WHERE user_id = %s',
                        (amount, session['user_id']))
         mysql.connection.commit()
         cursor.close()
@@ -75,13 +82,20 @@ def add_income():
 @app.route('/home')
 def home():
     if 'logged_in' in session:
+        # this is the second step of fetching data to be displayed on the home page
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT amount FROM cs50 WHERE id = %s',
+        cursor.execute('SELECT source, s_amount FROM storage WHERE user_id = %s',
+                       (session['user_id'],))
+        income_sources = cursor.fetchall()
+        cursor.close()
+
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT amount FROM storage WHERE user_id = %s',
                        (session['user_id'],))
         income = cursor.fetchone()
-        finalamount = income['amount']
+        finalamount = income['amount'] if income else 0
         cursor.close()
-        return render_template('home.html', finalamount=finalamount)
+        return render_template('home.html', finalamount=finalamount, income_sources=income_sources)
     else:
         flash('Please log in to access this page.', 'warning')
         return redirect(url_for('login'))

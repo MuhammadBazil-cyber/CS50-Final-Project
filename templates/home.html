@@ -13,18 +13,44 @@
             <li> <input type="text" name="income_source" placeholder="Income source" /> <br>
             <input type="number" name="amount" placeholder="Amount in USD $" /></li>
             <li> 
-                <button type="button" class="ADD">Add another source</button> 
+                <!-- <button type="button" class="ADD">Add another source</button>  -->
                 <button type="submit" class="ADD_INCOME">Add Income</button>
             </li>
+            <li><strong>Income Sources:</strong></li>
+            {% for income in income_sources %}
             <li>
-                <p>Your current total income is: ${{ finalamount }}</p>
+                <p>Source: {{ income.source }}</p>
+                <p>Amount: ${{ income.s_amount }}</p>
             </li>
+            {% endfor %}
+            <li><strong>Total Income: ${{ finalamount }}</strong></li>
         </ul>
     </form>
     <a href="/logout">Logout</a>
 
 </body>
-<script>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <script>
 document.querySelector('.ADD').onclick = function() {
     // this is for first adding income list, being a parent element of button and li into a variable
     const incomelist = document.querySelector('ul');
@@ -38,5 +64,4 @@ document.querySelector('.ADD').onclick = function() {
     incomelist.insertBefore(newIncome, addButton.parentElement);
 };
  // Add your JavaScript code here for handling income addition
-</script>
-</html>
+</script> -->
