@@ -99,6 +99,20 @@ def home():
     else:
         flash('Please log in to access this page.', 'warning')
         return redirect(url_for('login'))
+
+@app.route('/clear_buffer', methods=['POST'])
+def clear_buffer():
+    if 'logged_in' in session:
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('DELETE FROM storage WHERE user_id = %s', (session['user_id'],))
+        mysql.connection.commit()
+        cursor.close()
+        flash('All income entries cleared.', 'info')
+        return redirect(url_for('home'))
+    else:
+        flash('Please log in to access this page.', 'warning')
+        return redirect(url_for('login'))
+    
     
 @app.route('/logout')
 def logout():

@@ -20,5 +20,8 @@ sure is adding and projecting the individual and total amount with sources when 
 income, individually. The data base is working fine as well.
 
 My next goal is to some how, make a clear buffer button to clear the database's values of incomes and sources, for a fresh start, if you made a mistake while adding incomes, may be!
-
 We need a clear the previous buffer as well for new financial analysis !
+
+Now that we are done with the income part. What is left is the expenses part. Same like income entries, we can use the same algorithm to wite out our expenses, with all the add and remove buffer functionallity. Though I am confused whether creating all these routes will effect the functionallity of the program or not? Or is it a bad practice or not.
+
+After listing the expenses, comes the subtraction part, where we should potentially create a button for subtracting all the expenses from the incomes and give out the fun money etc. We can play with the remaining money as well, by using some alogorithm to divide it among a number of categories including fun-money or may be savings.
