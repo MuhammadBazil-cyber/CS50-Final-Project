@@ -78,7 +78,30 @@ def add_income():
     else:
         flash('Please log in to access this page.', 'warning')
         return redirect(url_for('login'))
-
+    
+@app.route('/add_expense', methods=['POST'])
+def add_expense():
+    if 'logged_in' in session:
+        expense_amount = request.form.get('expense_amount')
+        expense_source = request.form.get('expense_source')
+        # storing expense data
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('INSERT INTO expenses (source, amount, user_id) VALUES (%s, %s, %s)',
+                       (expense_source, expense_amount, session['user_id']))
+        mysql.connection.commit()
+        cursor.close()  
+        # updating the total amount in the main amount column by subtracting the expense
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('UPDATE storage SET amount = amount - %s WHERE user_id = %s',
+                       (expense_amount, session['user_id']))
+        mysql.connection.commit()
+        cursor.close()
+        flash('Expense added successfully!', 'success')
+        return redirect(url_for('home'))
+    else:
+        flash('Please log in to access this page.', 'warning')
+        return redirect(url_for('login'))
+    
 @app.route('/home')
 def home():
     if 'logged_in' in session:
@@ -87,15 +110,33 @@ def home():
         cursor.execute('SELECT source, s_amount FROM storage WHERE user_id = %s',
                        (session['user_id'],))
         income_sources = cursor.fetchall()
-        cursor.close()
 
+        cursor.close()
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('SELECT amount FROM storage WHERE user_id = %s',
                        (session['user_id'],))
         income = cursor.fetchone()
         finalamount = income['amount'] if income else 0
         cursor.close()
-        return render_template('home.html', finalamount=finalamount, income_sources=income_sources)
+
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT source, amount FROM expenses WHERE user_id = %s', (session['user_id'],))
+        expense_sources = cursor.fetchall()
+        cursor.close()
+
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT SUM(s_amount) AS total_income FROM storage WHERE user_id = %s', (session['user_id'],))
+        total_income_result = cursor.fetchone()
+        total_income = total_income_result['total_income'] if total_income_result else 0
+        cursor.close()
+
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT SUM(amount) AS total_expenses FROM expenses WHERE user_id = %s', (session['user_id'],))
+        total_expenses_result = cursor.fetchone()
+        total_expenses = total_expenses_result['total_expenses'] if total_expenses_result else 0
+        cursor.close()
+        
+        return render_template('home.html', finalamount=finalamount, income_sources=income_sources, expense_sources=expense_sources, total_expenses=total_expenses, total_income=total_income)
     else:
         flash('Please log in to access this page.', 'warning')
         return redirect(url_for('login'))

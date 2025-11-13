@@ -9,6 +9,7 @@
     <h1>Welcome to the Home Page</h1>
     <p>You are successfully logged in!</p>
     <form action="/add_income" method="post">
+        <h2>Add Income</h2>
         <ul>
             <li> <input type="text" name="income_source" placeholder="Income source" /> <br>
             <input type="number" name="amount" placeholder="Amount in USD $" /></li>
@@ -23,14 +24,39 @@
                 <p>Amount: ${{ income.s_amount }}</p>
             </li>
             {% endfor %}
-            <li><strong>Total Income: ${{ finalamount }}</strong></li>
+            <li><strong>Total Income: ${{ total_income }}</strong></li>
         </ul>
     </form>
     <form action="/clear_buffer" method="post">
         <button type="submit" class="CLEAR_BUFFER">Clear All Income Entries</button>
     </form>
-    <a href="/logout">Logout</a>
 
+    <form action="/add_expense" method="post">
+        <h2>Add Expense</h2>
+        <ul>
+            <li>
+                <input type="text" name="expense_source" placeholder="Expense source" />
+                <input type="number" name="expense_amount" placeholder="Amount in USD $" />
+            </li>
+            <li>
+                <button type="submit" class="ADD_EXPENSE">Add Expense</button>
+            </li>
+            <li><strong>Expense Sources:</strong></li>
+            {% for expense in expense_sources %}    
+            <li>
+                <p>Source: {{ expense.source }}</p>
+                <p>Amount: ${{ expense.amount }}</p>
+            </li>
+            {% endfor %}
+            <li><strong>Total Expenses: ${{ total_expenses }}</strong></li>
+        </ul>
+    </form>
+
+    <div>
+        <h2>Final Remaining Amount</h2>
+        <p>Your final amount after expenses is: ${{ finalamount}}</p>    
+    </div>
+        <a href="/logout">Logout</a>
 </body>
 
 </html>

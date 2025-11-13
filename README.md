@@ -1,4 +1,4 @@
- CS50-Final-Project
+CS50-Final-Project
 
 Developer notes:-
 
@@ -25,3 +25,14 @@ We need a clear the previous buffer as well for new financial analysis !
 Now that we are done with the income part. What is left is the expenses part. Same like income entries, we can use the same algorithm to wite out our expenses, with all the add and remove buffer functionallity. Though I am confused whether creating all these routes will effect the functionallity of the program or not? Or is it a bad practice or not.
 
 After listing the expenses, comes the subtraction part, where we should potentially create a button for subtracting all the expenses from the incomes and give out the fun money etc. We can play with the remaining money as well, by using some alogorithm to divide it among a number of categories including fun-money or may be savings.
+
+
+Working yet not effective model of add expense, do something with the final amount, like make is do subtracting between
+total expense and income.
+
+
+SQL (Structured Query Language): This is a language used to communicate with and manage relational databases. Think of it as the set of commands you use to create databases, tables, insert data, retrieve data, update data, and delete data. It's a standard language used across many different relational database systems.
+
+MySQL: This is a database management system (DBMS) that uses SQL. It's a specific software program that stores and organizes data in a structured way (in tables with rows and columns). MySQL understands and executes the SQL commands you give it. Other examples of database management systems include PostgreSQL, Oracle, and Microsoft SQL Server.
+
+phpMyAdmin: This is a graphical user interface (GUI) tool that helps you manage MySQL databases. It's a web-based application that provides a visual way to interact with your MySQL database without having to type out every single SQL command. You can use phpMyAdmin to create databases and tables, insert data, run queries, and manage users and permissions, all through a user-friendly interface in your web browser. It essentially translates your clicks and selections into SQL commands and sends them to the MySQL database.
