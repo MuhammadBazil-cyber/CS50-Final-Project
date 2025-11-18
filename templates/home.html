@@ -27,7 +27,7 @@
             <li><strong>Total Income: ${{ total_income }}</strong></li>
         </ul>
     </form>
-    <form action="/clear_buffer" method="post">
+    <form action="/clearincome_buffer" method="post">
         <button type="submit" class="CLEAR_BUFFER">Clear All Income Entries</button>
     </form>
 
@@ -45,16 +45,19 @@
             {% for expense in expense_sources %}    
             <li>
                 <p>Source: {{ expense.source }}</p>
-                <p>Amount: ${{ expense.amount }}</p>
+                <p>Amount: ${{ expense.s_amount }}</p>
             </li>
             {% endfor %}
             <li><strong>Total Expenses: ${{ total_expenses }}</strong></li>
         </ul>
     </form>
+    <form action="/clearexpense_buffer" method="post">
+        <button type="submit" class="CLEAR_BUFFER">Clear All Expense Entries</button>
+    </form>
 
     <div>
         <h2>Final Remaining Amount</h2>
-        <p>Your final amount after expenses is: ${{ finalamount}}</p>    
+        <p>Your final amount after expenses is: ${{ total_income|int - total_expenses|int }}</p>
     </div>
         <a href="/logout">Logout</a>
 </body>

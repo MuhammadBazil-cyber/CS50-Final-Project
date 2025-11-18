@@ -30,6 +30,12 @@ After listing the expenses, comes the subtraction part, where we should potentia
 Working yet not effective model of add expense, do something with the final amount, like make is do subtracting between
 total expense and income.
 
+Pleased with the results now. It is working well. The subtraction approach was better. Clear buffer for expenses has been added as well. Now before styling, try to some how break the remaining amount into elements like savings this much(should be)
+and fun money this much maximun this month or something like that. Use percentages to allocate these. Like 50% of remaining final amount to be put in savings, rest 25%(can be used for fun indirectly like metra for downtown) for miscellanious till month end, and the last 25 % as fun money.
+
+After this implmentation, start with the styling.
+
+Personal notes or learning outcomes:-
 
 SQL (Structured Query Language): This is a language used to communicate with and manage relational databases. Think of it as the set of commands you use to create databases, tables, insert data, retrieve data, update data, and delete data. It's a standard language used across many different relational database systems.
 

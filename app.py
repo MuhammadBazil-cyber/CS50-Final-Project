@@ -86,13 +86,13 @@ def add_expense():
         expense_source = request.form.get('expense_source')
         # storing expense data
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('INSERT INTO expenses (source, amount, user_id) VALUES (%s, %s, %s)',
+        cursor.execute('INSERT INTO expenses (source, s_amount, user_id) VALUES (%s, %s, %s)',
                        (expense_source, expense_amount, session['user_id']))
         mysql.connection.commit()
         cursor.close()  
         # updating the total amount in the main amount column by subtracting the expense
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('UPDATE storage SET amount = amount - %s WHERE user_id = %s',
+        cursor.execute('UPDATE expenses SET amount = amount + %s WHERE user_id = %s',
                        (expense_amount, session['user_id']))
         mysql.connection.commit()
         cursor.close()
@@ -116,33 +116,28 @@ def home():
         cursor.execute('SELECT amount FROM storage WHERE user_id = %s',
                        (session['user_id'],))
         income = cursor.fetchone()
-        finalamount = income['amount'] if income else 0
+        total_income = income['amount'] if income else 0
         cursor.close()
 
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT source, amount FROM expenses WHERE user_id = %s', (session['user_id'],))
+        cursor.execute('SELECT source, s_amount FROM expenses WHERE user_id = %s', (session['user_id'],))
         expense_sources = cursor.fetchall()
         cursor.close()
 
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT SUM(s_amount) AS total_income FROM storage WHERE user_id = %s', (session['user_id'],))
-        total_income_result = cursor.fetchone()
-        total_income = total_income_result['total_income'] if total_income_result else 0
-        cursor.close()
-
-        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT SUM(amount) AS total_expenses FROM expenses WHERE user_id = %s', (session['user_id'],))
+        cursor.execute('SELECT amount FROM expenses WHERE user_id = %s', (session['user_id'],))
         total_expenses_result = cursor.fetchone()
-        total_expenses = total_expenses_result['total_expenses'] if total_expenses_result else 0
+        # fetchone is used to get a single record
+        total_expenses = total_expenses_result['amount'] if total_expenses_result else 0
         cursor.close()
         
-        return render_template('home.html', finalamount=finalamount, income_sources=income_sources, expense_sources=expense_sources, total_expenses=total_expenses, total_income=total_income)
+        return render_template('home.html', income_sources=income_sources, expense_sources=expense_sources, total_expenses=total_expenses, total_income=total_income)
     else:
         flash('Please log in to access this page.', 'warning')
         return redirect(url_for('login'))
 
-@app.route('/clear_buffer', methods=['POST'])
-def clear_buffer():
+@app.route('/clearincome_buffer', methods=['POST'])
+def clear_income_buffer():
     if 'logged_in' in session:
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('DELETE FROM storage WHERE user_id = %s', (session['user_id'],))
@@ -154,6 +149,18 @@ def clear_buffer():
         flash('Please log in to access this page.', 'warning')
         return redirect(url_for('login'))
     
+@app.route('/clearexpense_buffer', methods=['POST'])
+def clear_expense_buffer():
+    if 'logged_in' in session:
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('DELETE FROM expenses WHERE user_id = %s', (session['user_id'],))
+        mysql.connection.commit()
+        cursor.close()
+        flash('All expense entries cleared.', 'info')
+        return redirect(url_for('home'))
+    else:
+        flash('Please log in to access this page.', 'warning')
+        return redirect(url_for('login'))
     
 @app.route('/logout')
 def logout():
