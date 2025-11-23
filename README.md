@@ -1,3 +1,7 @@
+#Financial App
+#Video Demo: (https://youtu.be/VQymkmTeBXA)
+#Description:
+
 CS50-Final-Project
 
 Developer notes:-
@@ -37,6 +41,10 @@ After this implmentation, start with the styling.
 
 Personal notes or learning outcomes:-
 
+ <!-- form.email.label is for email input field in the login form. The size=32 attribute sets 
+the width of the input field to accommodate 32 characters. The syntax {{ ... }} is used in 
+templating engines like Jinja2 to render dynamic content. we could have used input type="email" name="email" size="32"
+to achieve the same effect with plain HTML, with submit button below. -->
 SQL (Structured Query Language): This is a language used to communicate with and manage relational databases. Think of it as the set of commands you use to create databases, tables, insert data, retrieve data, update data, and delete data. It's a standard language used across many different relational database systems.
 
 MySQL: This is a database management system (DBMS) that uses SQL. It's a specific software program that stores and organizes data in a structured way (in tables with rows and columns). MySQL understands and executes the SQL commands you give it. Other examples of database management systems include PostgreSQL, Oracle, and Microsoft SQL Server.
