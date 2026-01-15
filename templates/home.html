@@ -59,7 +59,24 @@
         <h2>Final Remaining Amount</h2>
         <p>Your final amount after expenses is: ${{ total_income|int - total_expenses|int }}</p>
     </div>
-        <a href="/logout">Logout</a>
+        
+    <div>
+        <h2>Budget Recommendation</h2>
+        {% if (total_income|int - total_expenses|int) > 0 %}
+            <p>You are within your budget! Keep up the good work!</p>
+        {% else %}
+            <p>You have exceeded your budget. Consider reviewing your expenses.</p>
+        {% endif %}
+    </div>
+    
+    <div>
+        <h2>Money Allocation</h2>
+        <p>Savings (20%): ${{ ((total_income|int - total_expenses|int) * 0.2) | round(2) }}</p>
+        <p>Fun money (80%): ${{ ((total_income|int - total_expenses|int) * 0.8) | round(2) }}</p>
+    </div>
+
+    <a href="/logout">Logout</a>
+
 </body>
 
 </html>
